@@ -3,70 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>متجر إلكتروني</title>
+  <title>متجر احترافي</title>
   <style>
-    body {font-family: Arial, Tahoma, sans-serif; margin:0; background:#f5f5f5}
-    header {background:#131921; color:#fff; padding:15px}
-    header h1 {margin:0}
-    .container {padding:20px}
-    .products {display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px}
-    .card {background:#fff; border-radius:8px; padding:15px; box-shadow:0 2px 6px rgba(0,0,0,.1)}
-    .card img {width:100%; height:180px; object-fit:cover}
-    .card h3 {margin:10px 0 5px}
-    .price {color:#b12704; font-weight:bold}
-    button {background:#ffd814; border:none; padding:10px; width:100%; cursor:pointer; border-radius:4px}
-    button:hover {background:#f7ca00}
-    .cart {position:fixed; bottom:20px; left:20px; background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.2)}
+    body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f1f3f6}
+    header{background:#131921;color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+    header h1{margin:0;font-size:22px}
+    .cart-btn{cursor:pointer;background:#febd69;color:#111;padding:8px 12px;border-radius:6px;font-weight:bold}
+    .container{padding:20px}
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+    .card{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);padding:15px;display:flex;flex-direction:column}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:8px}
+    .card h3{margin:10px 0 5px;font-size:16px}
+    .price{color:#b12704;font-weight:bold;margin-bottom:10px}
+    .card button{margin-top:auto;background:#ffd814;border:none;padding:10px;border-radius:6px;cursor:pointer;font-weight:bold}
+    .card button:hover{background:#f7ca00}
+
+    /* Cart */
+    .cart-panel{position:fixed;top:0;left:-100%;width:350px;height:100%;background:#fff;box-shadow:2px 0 10px rgba(0,0,0,.2);padding:20px;transition:.3s;overflow:auto;z-index:1000}
+    .cart-panel.active{left:0}
+    .cart-item{border-bottom:1px solid #eee;padding:10px 0}
+    .total{font-weight:bold;margin-top:15px}
+    .close{cursor:pointer;color:red;font-weight:bold}
   </style>
 </head>
 <body>
 <header>
-  <h1>🛒 متجري</h1>
+  <h1>🛒 متجر احترافي</h1>
+  <div class="cart-btn" onclick="toggleCart()">السلة (<span id="cartCount">0</span>)</div>
 </header>
 
 <div class="container">
   <div class="products" id="products"></div>
 </div>
 
-<div class="cart">
-  <strong>السلة:</strong> <span id="cartCount">0</span> منتجات
+<div class="cart-panel" id="cartPanel">
+  <div class="close" onclick="toggleCart()">✖ إغلاق</div>
+  <h2>سلة المشتريات</h2>
+  <div id="cartItems"></div>
+  <div class="total">الإجمالي: <span id="total">0</span> جنيه</div>
 </div>
 
 <script>
   const products = [];
+  for(let i=1;i<=100;i++){
+    products.push({id:i,name:`منتج رقم ${i}`,price:100+i*5,img:"https://via.placeholder.com/300"});
+  }
 
-for (let i = 1; i <= 100; i++) {
-  products.push({
-    id: i,
-    name: `منتج رقم ${i}`,
-    price: 100 + i * 10,
-    img: "https://via.placeholder.com/300"
-  });
-}
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  let cart = [];
-
-  function renderProducts() {
-    const container = document.getElementById('products');
-    container.innerHTML = '';
-    products.forEach(p => {
-      container.innerHTML += `
-        <div class="card">
-          <img src="${p.img}" />
-          <h3>${p.name}</h3>
-          <div class="price">${p.price} جنيه</div>
-          <button onclick="addToCart(${p.id})">أضف للسلة</button>
-        </div>
-      `;
+  function renderProducts(){
+    const box=document.getElementById('products');
+    box.innerHTML='';
+    products.forEach(p=>{
+      box.innerHTML+=`
+      <div class="card">
+        <img src="${p.img}">
+        <h3>${p.name}</h3>
+        <div class="price">${p.price} جنيه</div>
+        <button onclick="addToCart(${p.id})">أضف للسلة</button>
+      </div>`;
     });
   }
 
-  function addToCart(id) {
-    cart.push(id);
-    document.getElementById('cartCount').innerText = cart.length;
+  function addToCart(id){
+    const item=products.find(p=>p.id===id);
+    cart.push(item);
+    localStorage.setItem('cart',JSON.stringify(cart));
+    updateCart();
+  }
+
+  function updateCart(){
+    document.getElementById('cartCount').innerText=cart.length;
+    const items=document.getElementById('cartItems');
+    items.innerHTML='';
+    let sum=0;
+    cart.forEach(i=>{
+      sum+=i.price;
+      items.innerHTML+=`<div class="cart-item">${i.name} - ${i.price} جنيه</div>`;
+    });
+    document.getElementById('total').innerText=sum;
+  }
+
+  function toggleCart(){
+    document.getElementById('cartPanel').classList.toggle('active');
   }
 
   renderProducts();
+  updateCart();
 </script>
 </body>
 </html>

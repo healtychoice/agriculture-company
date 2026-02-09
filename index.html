@@ -1,95 +1,117 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>متجر احترافي</title>
-  <style>
-    body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f1f3f6}
-    header{background:#131921;color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
-    header h1{margin:0;font-size:22px}
-    .cart-btn{cursor:pointer;background:#febd69;color:#111;padding:8px 12px;border-radius:6px;font-weight:bold}
-    .container{padding:20px}
-    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
-    .card{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);padding:15px;display:flex;flex-direction:column}
-    .card img{width:100%;height:180px;object-fit:cover;border-radius:8px}
-    .card h3{margin:10px 0 5px;font-size:16px}
-    .price{color:#b12704;font-weight:bold;margin-bottom:10px}
-    .card button{margin-top:auto;background:#ffd814;border:none;padding:10px;border-radius:6px;cursor:pointer;font-weight:bold}
-    .card button:hover{background:#f7ca00}
-
-    /* Cart */
-    .cart-panel{position:fixed;top:0;left:-100%;width:350px;height:100%;background:#fff;box-shadow:2px 0 10px rgba(0,0,0,.2);padding:20px;transition:.3s;overflow:auto;z-index:1000}
-    .cart-panel.active{left:0}
-    .cart-item{border-bottom:1px solid #eee;padding:10px 0}
-    .total{font-weight:bold;margin-top:15px}
-    .close{cursor:pointer;color:red;font-weight:bold}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر احترافي كامل</title>
+<style>
+body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f1f3f6}
+header{background:#131921;color:#fff;padding:15px;display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px}
+input,select{padding:8px;border-radius:6px;border:1px solid #ccc}
+.cart-btn{margin-right:auto;background:#febd69;color:#111;padding:8px 12px;border-radius:6px;font-weight:bold;cursor:pointer}
+.container{padding:20px}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.card{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);padding:15px;display:flex;flex-direction:column}
+.card img{width:100%;height:180px;object-fit:cover;border-radius:8px}
+.card h3{font-size:15px;margin:8px 0}
+.price{color:#b12704;font-weight:bold}
+.card button{margin-top:auto;background:#ffd814;border:none;padding:10px;border-radius:6px;font-weight:bold;cursor:pointer}
+.card button:hover{background:#f7ca00}
+.cart-panel{position:fixed;top:0;left:-100%;width:360px;height:100%;background:#fff;box-shadow:2px 0 10px rgba(0,0,0,.2);padding:20px;transition:.3s;overflow:auto;z-index:999}
+.cart-panel.active{left:0}
+.cart-item{border-bottom:1px solid #eee;padding:8px 0;font-size:14px}
+.total{font-weight:bold;margin-top:10px}
+.close{cursor:pointer;color:red;font-weight:bold}
+.admin{background:#fff;padding:20px;margin:20px;border-radius:10px}
+.admin h2{margin-top:0}
+@media(max-width:600px){header{flex-direction:column;align-items:flex-start}}
+</style>
 </head>
 <body>
 <header>
-  <h1>🛒 متجر احترافي</h1>
-  <div class="cart-btn" onclick="toggleCart()">السلة (<span id="cartCount">0</span>)</div>
+<h1>🛒 متجر احترافي</h1>
+<input type="text" id="search" placeholder="ابحث عن منتج" onkeyup="renderProducts()">
+<select id="categoryFilter" onchange="renderProducts()">
+<option value="all">كل الأقسام</option>
+<option value="الكترونيات">إلكترونيات</option>
+<option value="ملابس">ملابس</option>
+<option value="اكسسوارات">إكسسوارات</option>
+</select>
+<div class="cart-btn" onclick="toggleCart()">السلة (<span id="cartCount">0</span>)</div>
 </header>
 
 <div class="container">
-  <div class="products" id="products"></div>
+<div class="products" id="products"></div>
 </div>
 
 <div class="cart-panel" id="cartPanel">
-  <div class="close" onclick="toggleCart()">✖ إغلاق</div>
-  <h2>سلة المشتريات</h2>
-  <div id="cartItems"></div>
-  <div class="total">الإجمالي: <span id="total">0</span> جنيه</div>
+<div class="close" onclick="toggleCart()">✖ إغلاق</div>
+<h2>سلة المشتريات</h2>
+<div id="cartItems"></div>
+<div class="total">الإجمالي: <span id="total">0</span> جنيه</div>
+<button onclick="checkout()" style="margin-top:10px;width:100%;padding:10px;background:#28a745;color:#fff;border:none;border-radius:6px">إتمام الشراء</button>
+</div>
+
+<div class="admin">
+<h2>لوحة التحكم (Admin)</h2>
+<input id="pName" placeholder="اسم المنتج">
+<input id="pPrice" placeholder="السعر" type="number">
+<input id="pCat" placeholder="القسم">
+<input id="pImg" placeholder="رابط الصورة">
+<button onclick="addProduct()">إضافة منتج</button>
 </div>
 
 <script>
-  const products = [];
-  for(let i=1;i<=100;i++){
-    products.push({id:i,name:`منتج رقم ${i}`,price:100+i*5,img:"https://via.placeholder.com/300"});
-  }
+let products=JSON.parse(localStorage.getItem('products'))||[];
+if(products.length===0){
+ const cats=['الكترونيات','ملابس','اكسسوارات'];
+ for(let i=1;i<=100;i++){
+  products.push({id:i,name:`منتج رقم ${i}`,price:100+i*5,cat:cats[i%3],img:'https://via.placeholder.com/300'});
+ }
+ localStorage.setItem('products',JSON.stringify(products));
+}
+let cart=JSON.parse(localStorage.getItem('cart'))||[];
 
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+function renderProducts(){
+ const box=document.getElementById('products');
+ const s=document.getElementById('search').value;
+ const c=document.getElementById('categoryFilter').value;
+ box.innerHTML='';
+ products.filter(p=>(p.name.includes(s))&&(c==='all'||p.cat===c))
+ .forEach(p=>{
+ box.innerHTML+=`<div class='card'>
+ <img src='${p.img}'>
+ <h3>${p.name}</h3>
+ <div>${p.cat}</div>
+ <div class='price'>${p.price} جنيه</div>
+ <button onclick='addToCart(${p.id})'>أضف للسلة</button>
+ </div>`;
+ });
+}
 
-  function renderProducts(){
-    const box=document.getElementById('products');
-    box.innerHTML='';
-    products.forEach(p=>{
-      box.innerHTML+=`
-      <div class="card">
-        <img src="${p.img}">
-        <h3>${p.name}</h3>
-        <div class="price">${p.price} جنيه</div>
-        <button onclick="addToCart(${p.id})">أضف للسلة</button>
-      </div>`;
-    });
-  }
+function addToCart(id){
+ cart.push(products.find(p=>p.id===id));
+ localStorage.setItem('cart',JSON.stringify(cart));
+ updateCart();
+}
 
-  function addToCart(id){
-    const item=products.find(p=>p.id===id);
-    cart.push(item);
-    localStorage.setItem('cart',JSON.stringify(cart));
-    updateCart();
-  }
-
-  function updateCart(){
-    document.getElementById('cartCount').innerText=cart.length;
-    const items=document.getElementById('cartItems');
-    items.innerHTML='';
-    let sum=0;
-    cart.forEach(i=>{
-      sum+=i.price;
-      items.innerHTML+=`<div class="cart-item">${i.name} - ${i.price} جنيه</div>`;
-    });
-    document.getElementById('total').innerText=sum;
-  }
-
-  function toggleCart(){
-    document.getElementById('cartPanel').classList.toggle('active');
-  }
-
-  renderProducts();
-  updateCart();
+function updateCart(){
+ document.getElementById('cartCount').innerText=cart.length;
+ const box=document.getElementById('cartItems');
+ box.innerHTML='';
+ let sum=0;
+ cart.forEach((i,idx)=>{sum+=i.price;box.innerHTML+=`<div class='cart-item'>${i.name} - ${i.price} <span style='color:red;cursor:pointer' onclick='removeItem(${idx})'>✖</span></div>`});
+ document.getElementById('total').innerText=sum;
+}
+function removeItem(i){cart.splice(i,1);localStorage.setItem('cart',JSON.stringify(cart));updateCart();}
+function toggleCart(){document.getElementById('cartPanel').classList.toggle('active');}
+function checkout(){alert('تم تسجيل الطلب (ديمو)');cart=[];localStorage.removeItem('cart');updateCart();}
+function addProduct(){
+ const p={id:Date.now(),name:pName.value,price:+pPrice.value,cat:pCat.value,img:pImg.value};
+ products.push(p);localStorage.setItem('products',JSON.stringify(products));renderProducts();
+}
+renderProducts();updateCart();
 </script>
 </body>
 </html>

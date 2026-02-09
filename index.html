@@ -1,169 +1,31 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شركة هيلثي تشويس للاستيراد والتصدير الزراعي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --main-color: #2e7d32;
-            --secondary-color: #fbc02d;
-            --text-color: #333;
-            --light-bg: #f9f9f9;
-        }
+import React from 'react';
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; line-height: 1.6; color: var(--text-color); scroll-behavior: smooth; }
+const products = [
+  { id: 1, name: 'ساعة ذكية', price: '$199', image: 'https://via.placeholder.com/150' },
+  { id: 2, name: 'سماعات لاسلكية', price: '$99', image: 'https://via.placeholder.com/150' },
+  { id: 3, name: 'هاتف ذكي', price: '$799', image: 'https://via.placeholder.com/150' },
+];
 
-        /* Header */
-        header {
-            background: white; padding: 1rem 5%; display: flex; justify-content: space-between;
-            align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;
-        }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--main-color); text-decoration: none; }
-        nav ul { display: flex; list-style: none; }
-        nav ul li { margin-right: 20px; }
-        nav ul li a { text-decoration: none; color: var(--text-color); font-weight: 600; transition: 0.3s; }
-        nav ul li a:hover { color: var(--main-color); }
+export default function Store() {
+  return (
+    <div className="bg-gray-100 min-h-screen p-8" dir="rtl">
+      <header className="text-center mb-10">
+        <h1 className="text-4xl font-bold text-blue-600">متجري الإلكتروني</h1>
+        <p className="text-gray-600">أفضل المنتجات بأقل الأسعار</p>
+      </header>
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80');
-            background-size: cover; background-position: center; height: 90vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; color: white; padding: 0 20px;
-        }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.4rem; margin-bottom: 2rem; max-width: 800px; }
-
-        /* Buttons */
-        .btn { background: var(--main-color); color: white; padding: 12px 35px; text-decoration: none; border-radius: 30px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
-        .btn:hover { background: #1b5e20; transform: scale(1.05); }
-
-        /* Features */
-        .features { padding: 5rem 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; background: white; }
-        .feature-card { padding: 40px; text-align: center; border-radius: 15px; background: var(--light-bg); transition: 0.3s; }
-        .feature-card i { font-size: 3.5rem; color: var(--main-color); margin-bottom: 20px; }
-        .feature-card:hover { transform: translateY(-10px); background: #e8f5e9; }
-
-        /* Products Gallery */
-        .products-section { padding: 5rem 5%; text-align: center; background: #fff; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
-        .product-item { position: relative; border-radius: 15px; overflow: hidden; height: 350px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .product-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .product-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: white; padding: 25px; text-align: right; }
-        .product-item:hover img { transform: scale(1.1); }
-
-        /* Contact Section */
-        .contact-section { padding: 5rem 5%; background: var(--light-bg); text-align: center; }
-        .contact-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .form-group { margin-bottom: 15px; text-align: right; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Cairo'; }
-
-        /* Footer */
-        footer { background: #1a1a1a; color: white; text-align: center; padding: 3rem; margin-top: 2rem; }
-        .social-links { margin-bottom: 20px; }
-        .social-links a { color: white; margin: 0 10px; font-size: 1.5rem; }
-
-        @media (max-width: 768px) {
-            nav ul { display: none; }
-            .hero h1 { font-size: 2.2rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <a href="#" class="logo">🍀 هيلثي تشويس للتصدير</a>
-        <nav>
-            <ul>
-                <li><a href="#">الرئيسية</a></li>
-                <li><a href="#products">منتجاتنا</a></li>
-                <li><a href="#contact">اتصل بنا</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <h1>أجود المحاصيل المصرية للعالم</h1>
-        <p>نحن رائدون في تصدير الخضروات والفواكه الطازجة بأعلى معايير الجودة الأوروبية والعالمية.</p>
-        <a href="#contact" class="btn">اطلب عرض سعر الآن</a>
-    </section>
-
-    <section class="features">
-        <div class="feature-card">
-            <i class="fas fa-check-circle"></i>
-            <h3>جودة معتمدة</h3>
-            <p>مطابقة للمواصفات القياسية الدولية والـ Global GAP.</p>
-        </div>
-        <div class="feature-card">
-            <i class="fas fa-shuttle-van"></i>
-            <h3>سلسلة توريد متكاملة</h3>
-            <p>من المزرعة إلى مخازن العميل مباشرة بأقصى سرعة.</p>
-        </div>
-        <div class="feature-card">
-            <i class="fas fa-globe-europe"></i>
-            <h3>تصدير لجميع دول العالم </h3>
-            <p>نصل بمنتجاتنا إلى أوروبا، الخليج العربي، وآسيا.</p>
-        </div>
-    </section>
-
-    <section id="products" class="products-section">
-        <h2 style="font-size: 2.5rem; color: var(--main-color);">منتجاتنا التصديرية</h2>
-        <div class="products-grid">
-            <div class="product-item">
-                <img src="https://images.unsplash.com/photo-1557844352-761f2565b576?auto=format&fit=crop&w=500&q=60" alt="خضروات">
-                <div class="product-overlay"><h3>الخضروات الطازجة</h3><p>فاصوليا، فلفل الوان و شطه، بطاطس</p></div>
-            </div>
-            <div class="product-item">
-                <img src="strawbery.jpg"موالح">
-                <div class="product-overlay"><h3>الموالح</h3><p>متخصصون في تصدير جميع انواع الفراوله بأجود انواعها </p></div>
-            </div>
-            <div class="product-item">
-                <img src="onions.jpg"بصل">
-                <div class="product-overlay"><h3>البصل والثوم</h3><p>بصل أحمر، بصل ذهبي، ثوم أحمر </p></div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {products.map(product => (
+          <div key={product.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-xl transition">
+            <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded" />
+            <h2 className="text-xl font-semibold mt-4">{product.name}</h2>
+            <p className="text-blue-500 font-bold mt-2">{product.price}</p>
+            <button className="w-full mt-4 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+              أضف للسلة
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
-    </section>
-    <section id="products" class="products-section">
-    <h2 style="font-size: 2.5rem; color: var(--main-color); margin-bottom: 5px;">البقوليات</h2>
-    <p style="font-size: 1.2rem; color: #666; margin-bottom: 30px;">تصدير جميع أنواع البقوليات</p>
-    
-    <div class="products-grid">
-        <div class="product-item">
-            <img src="legums.jpg.jpg" alt="
-            <div class="product-overlay">
-
-            </div>
-        </div>
-        
-        </div>
-</section>
-
-    <section id="contact" class="contact-section">
-        <h2 style="margin-bottom: 2rem;">تواصل معنا</h2>
-        <div class="contact-container">
-            <form>
-                <div class="form-group"><label>الاسم بالكامل</label><input type="text" placeholder="أدخل اسمك"></div>
-                <div class="form-group"><label>البريد الإلكتروني</label><input type="email" placeholder="email@example.com"></div>
-                <div class="form-group"><label>الرسالة</label><textarea rows="5" placeholder="اكتب طلبك هنا..."></textarea></div>
-                <button type="submit" class="btn">إرسال الرسالة</button>
-            </form>
-        </div>
-    </section>
-
-    <footer>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
-        </div>
-        <p>جميع الحقوق محفوظة &copy; 2026 شركة هيلثي تشويس للتصدير</p>
-    </footer>
-
-</body>
-</html>
+  );
+}

@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>joo online shopping</title>
     <style>
-        /* الأساسيات */
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; }
+        /* التنسيقات العامة */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f6; color: #333; }
         
-        /* الهيدر */
+        /* الهيدر الأخضر المريح */
         header { 
-            background-color: #1b4332; /* أخضر غامق جداً وفخم */
+            background-color: #1b4332; 
             color: white; 
             padding: 20px; 
             display: flex; 
@@ -23,83 +23,48 @@
         }
         header h1 { margin: 0; font-size: 24px; }
         
-        /* حقول البحث والفلاتر */
-        #search, #categoryFilter { 
-            padding: 10px; 
-            border-radius: 8px; 
-            border: 1px solid #ddd; 
-            outline: none;
-        }
+        #search, #categoryFilter { padding: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; }
         #search { flex-grow: 1; max-width: 400px; }
 
-        /* سلة المشتريات (الزرار العلوي) */
         .cart-btn { 
-            background: #52b788; 
-            color: white; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: 0.3s;
+            background: #52b788; color: white; padding: 10px 20px; border-radius: 8px; 
+            font-weight: bold; cursor: pointer; transition: 0.3s;
         }
-        .cart-btn:hover { background: #40916c; }
 
-        /* الحاوية والمنتجات */
+        /* حاوية المنتجات */
         .container { padding: 30px; }
-        .products { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 25px; 
-        }
+        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
 
         /* كارت المنتج */
         .card { 
-            background: #fff; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            padding: 15px; 
-            display: flex; 
-            flex-direction: column; 
-            transition: transform 0.3s;
-            border: 1px solid #eee;
+            background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            padding: 15px; display: flex; flex-direction: column; transition: 0.3s; border: 1px solid #eee;
         }
         .card:hover { transform: translateY(-5px); }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
-        .card h3 { font-size: 18px; margin: 15px 0 5px; color: #1b4332; }
-        .price { color: #2d6a4f; font-weight: bold; font-size: 1.2em; margin-bottom: 15px; }
+        .price { color: #2d6a4f; font-weight: bold; font-size: 1.2em; margin: 10px 0; }
         
-        /* زرار أضف للسلة */
+        /* زرار أضف للسلة الأخضر الفاتح */
         .card button { 
-            margin-top: auto; 
-            background: #74c69d; 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: 0.3s;
+            background: #74c69d; color: white; border: none; padding: 12px; 
+            border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
         .card button:hover { background: #52b788; }
 
         /* لوحة السلة الجانبية */
-        .cart-panel { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.3); padding: 25px; transition: 0.4s; z-index: 1000; }
+        .cart-panel { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.3); padding: 25px; transition: 0.4s; z-index: 1000; overflow-y: auto; }
         .cart-panel.active { left: 0; }
         .close { cursor: pointer; color: #e63946; font-weight: bold; margin-bottom: 20px; display: block; }
 
+        /* مودال (صفحة) إتمام الشراء */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
+        .modal-content { background: white; margin: 10% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; }
+        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .confirm-btn { background: #2d6a4f; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+
         /* الفوتر */
         footer { background: #1b4332; color: white; padding: 40px 20px; margin-top: 50px; text-align: center; }
-        .footer-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: auto; }
-        .footer-box h3 { border-bottom: 2px solid #52b788; padding-bottom: 10px; }
-        .footer-box ul { list-style: none; padding: 0; }
-        .footer-box a { color: #b7e4c7; text-decoration: none; line-height: 2; }
         .social-icons i { font-size: 24px; margin: 10px; color: white; }
-        
-        /* لوحة التحكم (Admin) */
-        .admin { background: #fff; padding: 25px; margin: 40px auto; border-radius: 15px; max-width: 800px; border: 1px dashed #2d6a4f; }
-        .admin input { margin: 5px; width: 180px; }
-
-        @media(max-width:600px){ header { flex-direction: column; } #search { width: 100%; } }
     </style>
 </head>
 <body>
@@ -123,45 +88,34 @@
 </div>
 
 <div class="cart-panel" id="cartPanel">
-    <div class="close" onclick="toggleCart()">✖ إغلاق</div>
-    <h2><i class="fas fa-shopping-basket"></i> سلة المشتريات</h2>
+    <div class="close" onclick="toggleCart()">✖ إغلاق السلة</div>
+    <h2><i class="fas fa-shopping-basket"></i> مشترياتك</h2>
     <div id="cartItems"></div>
     <hr>
-    <div class="total">الإجمالي: <span id="total">0</span> جنيه</div>
-    <button onclick="checkout()" style="margin-top:20px; width:100%; padding:12px; background:#2d6a4f; color:#fff; border:none; border-radius:8px; cursor:pointer;">إتمام الشراء</button>
+    <div style="font-size: 20px; font-weight: bold; margin: 15px 0;">الإجمالي: <span id="total">0</span> جنيه</div>
+    <button onclick="openCheckout()" style="width:100%; padding:15px; background:#2d6a4f; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">إتمام عملية الشراء</button>
+</div>
+
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCheckout()" style="text-align: left;">✖</span>
+        <h3><i class="fas fa-truck"></i> بيانات التوصيل</h3>
+        <p>أدخل بياناتك لتصلك المنتجات في أسرع وقت</p>
+        <input type="text" id="custName" placeholder="اسمك الثنائي">
+        <input type="tel" id="custPhone" placeholder="رقم الموبايل">
+        <input type="text" id="custAddress" placeholder="العنوان (المدينة - الشارع)">
+        <div id="orderFinalPrice" style="margin: 15px 0; font-weight: bold; color: #2d6a4f;"></div>
+        <button class="confirm-btn" onclick="submitOrder()">تأكيد الطلب عبر واتساب</button>
+    </div>
 </div>
 
 <footer>
-    <div class="footer-container">
-        <div class="footer-box">
-            <h3>عن المتجر</h3>
-            <p>نوفر لك أجود المنتجات بأفضل الأسعار.</p>
-        </div>
-        <div class="footer-box">
-            <h3>روابط سريعة</h3>
-            <ul>
-                <li><a href="#">الرئيسية</a></li>
-                <li><a href="#" onclick="showNumber()">تواصل معنا</a></li>
-                <p id="phone" style="display:none; color:#ffd814;">واتساب: 01008962930</p>
-            </ul>
-        </div>
-        <div class="footer-box">
-            <h3>تابعنا</h3>
-           <div class="social-icons">
-    <a href="https://www.facebook.com/YourPage" target="_blank">
-      <i class="fab fa-facebook-f"></i>
-    </a>
-
-    <a href="https://www.instagram.com/YourPage" target="_blank">
-      <i class="fab fa-instagram"></i>
-    </a>
-
-    <a href="https://wa.me/201008962930" target="_blank">
-      <i class="fab fa-whatsapp"></i>
-    </a>
-  </div>
-</div>
-    <p style="margin-top:20px; opacity:0.7;">©️ 2026 جميع الحقوق محفوظة | Youssef Store</p>
+    <p>©️ 2026 جميع الحقوق محفوظة | Youssef Store</p>
+    <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/201148494115" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
 </footer>
 
 <script>
@@ -173,6 +127,7 @@ if(products.length === 0){
     }
     localStorage.setItem('products', JSON.stringify(products));
 }
+
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function renderProducts(){
@@ -186,7 +141,7 @@ function renderProducts(){
         <div class='card'>
             <img src='${p.img}'>
             <h3>${p.name}</h3>
-            <div style="color:#666; font-size:13px;">القسم: ${p.cat}</div>
+            <div style="color:#777; font-size:13px;">القسم: ${p.cat}</div>
             <div class='price'>${p.price} جنيه</div>
             <button onclick='addToCart(${p.id})'><i class="fas fa-plus"></i> أضف للسلة</button>
         </div>`;
@@ -197,6 +152,7 @@ function addToCart(id){
     cart.push(products.find(p => p.id === id));
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCart();
+    alert("تمت الإضافة للسلة");
 }
 
 function updateCart(){
@@ -206,26 +162,50 @@ function updateCart(){
     let sum = 0;
     cart.forEach((i, idx) => {
         sum += i.price;
-        box.innerHTML += `<div class='cart-item' style="padding:10px 0; border-bottom:1px solid #eee;">
-            ${i.name} - ${i.price} ج.م 
-            <span style='color:red; cursor:pointer; float:left;' onclick='removeItem(${idx})'><i class="fas fa-trash"></i></span>
-        </div>`
+        box.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee;">
+            <span>${i.name}</span>
+            <span>${i.price} ج.م <i class="fas fa-trash" style="color:red; cursor:pointer; margin-right:10px;" onclick="removeItem(${idx})"></i></span>
+        </div>`;
     });
     document.getElementById('total').innerText = sum;
 }
 
 function removeItem(i){ cart.splice(i,1); localStorage.setItem('cart', JSON.stringify(cart)); updateCart(); }
 function toggleCart(){ document.getElementById('cartPanel').classList.toggle('active'); }
-function checkout(){ alert('تم تسجيل طلبك بنجاح!'); cart=[]; localStorage.removeItem('cart'); updateCart(); toggleCart(); }
-function addProduct(){
-    const p = {id:Date.now(), name:pName.value, price:+pPrice.value, cat:pCat.value, img:pImg.value || 'https://via.placeholder.com/300'};
-    products.push(p); localStorage.setItem('products', JSON.stringify(products)); renderProducts();
+
+// وظائف إتمام الشراء
+function openCheckout() {
+    if(cart.length === 0) return alert("سلتك فارغة!");
+    document.getElementById('orderFinalPrice').innerText = "إجمالي المبلغ: " + document.getElementById('total').innerText + " جنيه";
+    document.getElementById('checkoutModal').style.display = 'block';
 }
-function showNumber() { document.getElementById("phone").style.display = "block"; }
+function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
+
+function submitOrder(){
+    const name = document.getElementById('custName').value;
+    const phone = document.getElementById('custPhone').value;
+    const address = document.getElementById('custAddress').value;
+    const total = document.getElementById('total').innerText;
+
+    if(!name || !phone || !address) return alert("برجاء ملء جميع البيانات");
+
+    // تجهيز نص الرسالة للواتساب
+    let itemsList = cart.map(item => `- ${item.name} (${item.price} ج.م)`).join('%0A');
+    let message = `طلب جديد من المتجر:%0A%0A*الاسم:* ${name}%0A*التليفون:* ${phone}%0A*العنوان:* ${address}%0A%0A*الطلبات:*%0A${itemsList}%0A%0A*الإجمالي:* ${total} جنيه`;
+
+    // فتح الواتساب (ضع رقمك هنا بدلاً من 201148494115)
+    window.open(`https://wa.me/201148494115?text=${message}`, '_blank');
+
+    // تصفية السلة
+    cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
+    closeCheckout();
+    toggleCart();
+}
 
 renderProducts();
 updateCart();
 </script>
-
 </body>
 </html>

@@ -112,10 +112,10 @@
 <footer>
    
     <div class="social-icons">
+        <p>©️ 2026 جميع الحقوق محفوظة | Youssef Store</p>
         <a href="#"><i class="https://www.facebook.com/share/14VVqga4q7m/?mibextid=wwXIfr"></i></a>
         <a href="#"><i class="https://www.instagram.com/3_joo_33?igsh=aDk5NzFvcWVveDVx&utm_source=qr"></i></a>
         <a href="#"><i class="wa.me/201148494115"></i></a>
-        <p>©️ 2026 جميع الحقوق محفوظة | Youssef Store</p>
     </div>
 </footer>
 
@@ -182,27 +182,45 @@ function openCheckout() {
 }
 function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
 
-function submitOrder(){
+async function submitOrder() {
     const name = document.getElementById('custName').value;
     const phone = document.getElementById('custPhone').value;
     const address = document.getElementById('custAddress').value;
     const total = document.getElementById('total').innerText;
 
-    if(!name || !phone || !address) return alert("برجاء ملء جميع البيانات");
+    if (!name || !phone || !address) return alert("برجاء ملء جميع البيانات");
 
-    // تجهيز نص الرسالة للواتساب
-    let itemsList = cart.map(item => `- ${item.name} (${item.price} ج.م)`).join('%0A');
-    let message = `طلب جديد من المتجر:%0A%0A*الاسم:* ${name}%0A*التليفون:* ${phone}%0A*العنوان:* ${address}%0A%0A*الطلبات:*%0A${itemsList}%0A%0A*الإجمالي:* ${total} جنيه`;
+    // تجهيز قائمة المنتجات
+    let itemsList = cart.map(item => `${item.name} (${item.price} ج.م)`).join(', ');
 
-    // فتح الواتساب (ضع رقمك هنا بدلاً من 201148494115)
-    window.open(`https://wa.me/201148494115?text=${message}`, '_blank');
+    // البيانات اللي هتبعت
+    const formData = {
+        "الاسم": name,
+        "رقم التليفون": phone,
+        "العنوان": address,
+        "الطلبات": itemsList,
+        "الإجمالي": total + " جنيه"
+    };
 
-    // تصفية السلة
-    cart = [];
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCart();
-    closeCheckout();
-    toggleCart();
+    // إرسال البيانات (استبدل الرابط اللي تحت بالرابط بتاعك من Formspree)
+    const response = await fetch('https://formspree.io/f/maqdqevq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+
+    if (response.ok) {
+        alert(`شكراً يا ${name}، تم استلام طلبك بنجاح وسنتواصل معك قريباً.`);
+        
+        // تصفية السلة وقفل المودال
+        cart = [];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+        closeCheckout();
+        if(document.getElementById('cartPanel').classList.contains('active')) toggleCart();
+    } else {
+        alert("عذراً، حدث خطأ في إرسال الطلب. حاول مرة أخرى.");
+    }
 }
 
 renderProducts();

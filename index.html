@@ -1,199 +1,233 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>joo online shopping </title>
-<style>
-body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f1f3f6}
-header{background:#131921;color:#fff;padding:15px;display:flex;align-items:center;gap:15px;flex-wrap:wrap}
-header h1{margin:0;font-size:22px}
-input,select{padding:8px;border-radius:6px;border:1px solid #ccc}
-.cart-btn{margin-right:auto;background:#febd69;color:#111;padding:8px 12px;border-radius:6px;font-weight:bold;cursor:pointer}
-.container{padding:20px}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
-.card{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);padding:15px;display:flex;flex-direction:column}
-.card img{width:100%;height:180px;object-fit:cover;border-radius:8px}
-.card h3{font-size:15px;margin:8px 0}
-.price{color:#b12704;font-weight:bold}
-.card button{margin-top:auto;background:#ffd814;border:none;padding:10px;border-radius:6px;font-weight:bold;cursor:pointer}
-.card button:hover{background:#f7ca00}
-.cart-panel{position:fixed;top:0;left:-100%;width:360px;height:100%;background:#fff;box-shadow:2px 0 10px rgba(0,0,0,.2);padding:20px;transition:.3s;overflow:auto;z-index:999}
-.cart-panel.active{left:0}
-.cart-item{border-bottom:1px solid #eee;padding:8px 0;font-size:14px}
-.total{font-weight:bold;margin-top:10px}
-.close{cursor:pointer;color:red;font-weight:bold}
-.admin{background:#fff;padding:20px;margin:20px;border-radius:10px}
-.admin h2{margin-top:0}
-@media(max-width:600px){header{flex-direction:column;align-items:flex-start}}
-</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>joo online shopping</title>
+    <style>
+        /* الأساسيات */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; }
+        
+        /* الهيدر */
+        header { 
+            background-color: #1b4332; /* أخضر غامق جداً وفخم */
+            color: white; 
+            padding: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 15px; 
+            flex-wrap: wrap;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        header h1 { margin: 0; font-size: 24px; }
+        
+        /* حقول البحث والفلاتر */
+        #search, #categoryFilter { 
+            padding: 10px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            outline: none;
+        }
+        #search { flex-grow: 1; max-width: 400px; }
+
+        /* سلة المشتريات (الزرار العلوي) */
+        .cart-btn { 
+            background: #52b788; 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .cart-btn:hover { background: #40916c; }
+
+        /* الحاوية والمنتجات */
+        .container { padding: 30px; }
+        .products { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 25px; 
+        }
+
+        /* كارت المنتج */
+        .card { 
+            background: #fff; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
+        .card h3 { font-size: 18px; margin: 15px 0 5px; color: #1b4332; }
+        .price { color: #2d6a4f; font-weight: bold; font-size: 1.2em; margin-bottom: 15px; }
+        
+        /* زرار أضف للسلة */
+        .card button { 
+            margin-top: auto; 
+            background: #74c69d; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .card button:hover { background: #52b788; }
+
+        /* لوحة السلة الجانبية */
+        .cart-panel { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.3); padding: 25px; transition: 0.4s; z-index: 1000; }
+        .cart-panel.active { left: 0; }
+        .close { cursor: pointer; color: #e63946; font-weight: bold; margin-bottom: 20px; display: block; }
+
+        /* الفوتر */
+        footer { background: #1b4332; color: white; padding: 40px 20px; margin-top: 50px; text-align: center; }
+        .footer-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: auto; }
+        .footer-box h3 { border-bottom: 2px solid #52b788; padding-bottom: 10px; }
+        .footer-box ul { list-style: none; padding: 0; }
+        .footer-box a { color: #b7e4c7; text-decoration: none; line-height: 2; }
+        .social-icons i { font-size: 24px; margin: 10px; color: white; }
+        
+        /* لوحة التحكم (Admin) */
+        .admin { background: #fff; padding: 25px; margin: 40px auto; border-radius: 15px; max-width: 800px; border: 1px dashed #2d6a4f; }
+        .admin input { margin: 5px; width: 180px; }
+
+        @media(max-width:600px){ header { flex-direction: column; } #search { width: 100%; } }
+    </style>
 </head>
- <style>
-  header {
-    background-color: #2d6a4f; /* أخضر مريح للعين */
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* ضل خفيف عشان البراند يظهر */
-    font-family: Arial, sans-serif;
-  }
-
-  header h1 {
-    margin: 0 0 10px 0;
-  }
-
-  /* تنسيق حقل البحث عشان يماشي اللون الجديد */
-  #search {
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
-    width: 60%;
-  }
-</style>
 <body>
+
 <header>
-<h1>🛒 joo store </h1>
-<input type="text" id="search" placeholder="ابحث عن منتج" onkeyup="renderProducts()">
-<select id="categoryFilter" onchange="renderProducts()">
-<option value="all">كل الأقسام</option>
-<option value="الكترونيات">إلكترونيات</option>
-<option value="ملابس">ملابس</option>
-<option value="اكسسوارات">إكسسوارات</option>
-</select>
-<div class="cart-btn" onclick="toggleCart()">السلة (<span id="cartCount">0</span>)</div>
+    <h1>🛒 joo store</h1>
+    <input type="text" id="search" placeholder="ابحث عن منتج..." onkeyup="renderProducts()">
+    <select id="categoryFilter" onchange="renderProducts()">
+        <option value="all">كل الأقسام</option>
+        <option value="الكترونيات">إلكترونيات</option>
+        <option value="ملابس">ملابس</option>
+        <option value="اكسسوارات">إكسسوارات</option>
+    </select>
+    <div class="cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i> السلة (<span id="cartCount">0</span>)
+    </div>
 </header>
 
 <div class="container">
-<div class="products" id="products"></div>
+    <div class="products" id="products"></div>
 </div>
 
 <div class="cart-panel" id="cartPanel">
-<div class="close" onclick="toggleCart()">✖ إغلاق</div>
-<h2>سلة المشتريات</h2>
-<div id="cartItems"></div>
-<div class="total">الإجمالي: <span id="total">0</span> جنيه</div>
-<button onclick="checkout()" style="margin-top:10px;width:100%;padding:10px;background:#28a745;color:#fff;border:none;border-radius:6px">إتمام الشراء</button>
+    <div class="close" onclick="toggleCart()">✖ إغلاق</div>
+    <h2><i class="fas fa-shopping-basket"></i> سلة المشتريات</h2>
+    <div id="cartItems"></div>
+    <hr>
+    <div class="total">الإجمالي: <span id="total">0</span> جنيه</div>
+    <button onclick="checkout()" style="margin-top:20px; width:100%; padding:12px; background:#2d6a4f; color:#fff; border:none; border-radius:8px; cursor:pointer;">إتمام الشراء</button>
 </div>
 
 <div class="admin">
-<h2>لوحة التحكم (Admin)</h2>
-<input id="pName" placeholder="اسم المنتج">
-<input id="pPrice" placeholder="السعر" type="number">
-<input id="pCat" placeholder="القسم">
-<input id="pImg" placeholder="رابط الصورة">
-<button onclick="addProduct()">إضافة منتج</button>
+    <h2><i class="fas fa-user-shield"></i> إضافة منتج جديد</h2>
+    <input id="pName" placeholder="اسم المنتج">
+    <input id="pPrice" placeholder="السعر" type="number">
+    <input id="pCat" placeholder="القسم">
+    <input id="pImg" placeholder="رابط الصورة">
+    <button onclick="addProduct()" style="background:#1b4332; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">إضافة</button>
 </div>
 
+<footer>
+    <div class="footer-container">
+        <div class="footer-box">
+            <h3>عن المتجر</h3>
+            <p>نوفر لك أجود المنتجات الزراعية والإلكترونية بأفضل الأسعار.</p>
+        </div>
+        <div class="footer-box">
+            <h3>روابط سريعة</h3>
+            <ul>
+                <li><a href="#">الرئيسية</a></li>
+                <li><a href="#" onclick="showNumber()">تواصل معنا</a></li>
+                <p id="phone" style="display:none; color:#ffd814;">واتساب: 01008962930</p>
+            </ul>
+        </div>
+        <div class="footer-box">
+            <h3>تابعنا</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+    <p style="margin-top:20px; opacity:0.7;">©️ 2026 جميع الحقوق محفوظة | Youssef Store</p>
+</footer>
+
 <script>
-let products=JSON.parse(localStorage.getItem('products'))||[];
-if(products.length===0){
- const cats=['الكترونيات','ملابس','اكسسوارات'];
- for(let i=1;i<=100;i++){
-  products.push({id:i,name:`منتج رقم ${i}`,price:100+i*5,cat:cats[i%3],img:'https://via.placeholder.com/300'});
- }
- localStorage.setItem('products',JSON.stringify(products));
+let products = JSON.parse(localStorage.getItem('products')) || [];
+if(products.length === 0){
+    const cats = ['الكترونيات','ملابس','اكسسوارات'];
+    for(let i=1; i<=8; i++){
+        products.push({id:i, name:`منتج عالي الجودة ${i}`, price:100+i*10, cat:cats[i%3], img:'https://via.placeholder.com/300/2d6a4f/ffffff?text=Product'});
+    }
+    localStorage.setItem('products', JSON.stringify(products));
 }
-let cart=JSON.parse(localStorage.getItem('cart'))||[];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function renderProducts(){
- const box=document.getElementById('products');
- const s=document.getElementById('search').value;
- const c=document.getElementById('categoryFilter').value;
- box.innerHTML='';
- products.filter(p=>(p.name.includes(s))&&(c==='all'||p.cat===c))
- .forEach(p=>{
- box.innerHTML+=`<div class='card'>
- <img src='${p.img}'>
- <h3>${p.name}</h3>
- <div>${p.cat}</div>
- <div class='price'>${p.price} جنيه</div>
- <button onclick='addToCart(${p.id})'>أضف للسلة</button>
- </div>`;
- });
+    const box = document.getElementById('products');
+    const s = document.getElementById('search').value;
+    const c = document.getElementById('categoryFilter').value;
+    box.innerHTML = '';
+    products.filter(p => (p.name.includes(s)) && (c === 'all' || p.cat === c))
+    .forEach(p => {
+        box.innerHTML += `
+        <div class='card'>
+            <img src='${p.img}'>
+            <h3>${p.name}</h3>
+            <div style="color:#666; font-size:13px;">القسم: ${p.cat}</div>
+            <div class='price'>${p.price} جنيه</div>
+            <button onclick='addToCart(${p.id})'><i class="fas fa-plus"></i> أضف للسلة</button>
+        </div>`;
+    });
 }
 
 function addToCart(id){
- cart.push(products.find(p=>p.id===id));
- localStorage.setItem('cart',JSON.stringify(cart));
- updateCart();
+    cart.push(products.find(p => p.id === id));
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
 }
 
 function updateCart(){
- document.getElementById('cartCount').innerText=cart.length;
- const box=document.getElementById('cartItems');
- box.innerHTML='';
- let sum=0;
- cart.forEach((i,idx)=>{sum+=i.price;box.innerHTML+=`<div class='cart-item'>${i.name} - ${i.price} <span style='color:red;cursor:pointer' onclick='removeItem(${idx})'>✖</span></div>`});
- document.getElementById('total').innerText=sum;
+    document.getElementById('cartCount').innerText = cart.length;
+    const box = document.getElementById('cartItems');
+    box.innerHTML = '';
+    let sum = 0;
+    cart.forEach((i, idx) => {
+        sum += i.price;
+        box.innerHTML += `<div class='cart-item' style="padding:10px 0; border-bottom:1px solid #eee;">
+            ${i.name} - ${i.price} ج.م 
+            <span style='color:red; cursor:pointer; float:left;' onclick='removeItem(${idx})'><i class="fas fa-trash"></i></span>
+        </div>`
+    });
+    document.getElementById('total').innerText = sum;
 }
-function removeItem(i){cart.splice(i,1);localStorage.setItem('cart',JSON.stringify(cart));updateCart();}
-function toggleCart(){document.getElementById('cartPanel').classList.toggle('active');}
-function checkout(){alert('تم تسجيل الطلب (ديمو)');cart=[];localStorage.removeItem('cart');updateCart();}
+
+function removeItem(i){ cart.splice(i,1); localStorage.setItem('cart', JSON.stringify(cart)); updateCart(); }
+function toggleCart(){ document.getElementById('cartPanel').classList.toggle('active'); }
+function checkout(){ alert('تم تسجيل طلبك بنجاح!'); cart=[]; localStorage.removeItem('cart'); updateCart(); toggleCart(); }
 function addProduct(){
- const p={id:Date.now(),name:pName.value,price:+pPrice.value,cat:pCat.value,img:pImg.value};
- products.push(p);localStorage.setItem('products',JSON.stringify(products));renderProducts();
+    const p = {id:Date.now(), name:pName.value, price:+pPrice.value, cat:pCat.value, img:pImg.value || 'https://via.placeholder.com/300'};
+    products.push(p); localStorage.setItem('products', JSON.stringify(products)); renderProducts();
 }
-renderProducts();updateCart();
+function showNumber() { document.getElementById("phone").style.display = "block"; }
+
+renderProducts();
+updateCart();
 </script>
-<footer class="footer">
-  <div class="footer-container">
 
-    <div class="footer-box">
-      <h3>عن المتجر</h3>
-      <p>متجر إلكتروني متخصص في بيع أفضل المنتجات بأعلى جودة وأفضل سعر.</p>
-    </div>
-
-    <div class="footer-box">
-      <h3>روابط سريعة</h3>
-      <ul>
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#">المنتجات</a></li>
-        <li><a href="#">العروض</a></li>
-        <a href="#" class="contact-btn" onclick="showNumber()">تواصل معنا</a>
-
-<p id="phone" style="display:none;">رقمنا: 01008962930</p>
-
-<script>
-function showNumber() {
-  document.getElementById("phone").style.display = "block";
-}
-</script>
-      </ul>
-    </div>
-
-    <div class="footer-box">
-      <h3>خدمة العملاء</h3>
-      <ul>
-        <li><a href="#">سياسة الاسترجاع</a></li>
-        <li><a href="#">الشحن والتوصيل</a></li>
-        <li><a href="#">الأسئلة الشائعة</a></li>
-      </ul>
-    </div>
-
-<div class="footer-box">
-  <h3>تابعنا</h3>
-
-  <div class="social-icons">
-    <a href="https://www.facebook.com/share/14VVqga4q7m/?mibextid=wwXIfr" target="_blank">
-      <i class="fab fa-facebook-f"></i>
-    </a>
-
-    <a href="https://www.instagram.com/3_joo_33?igsh=aDk5NzFvcWVveDVx&utm_source=qr" target="_blank">
-      <i class="fab fa-instagram"></i>
-    </a>
-
-    <a href="wa.me/201148494115" target="_blank">
-      <i class="fab fa-whatsapp"></i>
-    </a>
-  </div>
-</div>
-
-  </div>
-
-  <div class="footer-bottom">
-    <p>© 2026 جميع الحقوق محفوظة | Youssef Store</p>
-  </div>
-</footer> 
 </body>
 </html>
